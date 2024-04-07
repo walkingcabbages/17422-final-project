@@ -3,6 +3,8 @@ import socket
 import numpy as np 
 import scipy as sp
 from sklearn.svm import SVC
+from scipy.fft import fft
+
 
 frame_rate = 50 # accelerometer sampling rate
 duration_s = 2.5 # sample duration in seconds
@@ -56,17 +58,46 @@ def get_feature_conditional(peaks, prominences, mode):
         return np.average(np.diff(prominences[0]))
 
 def featurize(arr):
-    ax = median_filter(extract_ax(arr))
-    ay = median_filter(extract_ay(arr))
-    (ax_peaks, ax_mins, ay_peaks, ay_mins) = get_extrema(ax, ay)
-    (ax_peak_prominence, ax_min_prominence, ay_peak_prominence, ay_min_prominence) = get_prominence(ax, ax_peaks, ax_mins, ay, ay_peaks, ay_mins)
-    fvec = np.empty((4,))
-    fvec[0] = ax_peaks[0].shape[0] # number of ax peaks
-    fvec[1] = ay_peaks[0].shape[0] # number of ay peaks
-    fvec[2] = get_feature_conditional(ax_peaks, ax_peak_prominence, 'AVG') # average prominence of ax maxima
-    fvec[3] = get_feature_conditional(ay_peaks, ay_peak_prominence, 'AVG') # average prominence of ay maxima
-    # fvec[4] = ax_mins[0].shape[0]
-    return fvec
+	### amy
+	ax = median_filter(extract_ax(arr))
+	ay = median_filter(extract_ay(arr))
+	(ax_peaks, ax_mins, ay_peaks, ay_mins) = get_extrema(ax, ay)
+	(ax_peak_prominence, ax_min_prominence, ay_peak_prominence, ay_min_prominence) = get_prominence(ax, ax_peaks, ax_mins, ay, ay_peaks, ay_mins)
+	fvec = []
+	fvec.append(ax_peaks[0].shape[0]) # number of ax peaks
+	fvec.append(ay_peaks[0].shape[0]) # number of ay peaks
+	fvec.append(get_feature_conditional(ax_peaks, ax_peak_prominence, 'AVG')) # average prominence of ax maxima
+	fvec.append(get_feature_conditional(ay_peaks, ay_peak_prominence, 'AVG')) # average prominence of ay maxima
+	
+	### nandini
+	X_cord = arr[:, 0]
+	Y_cord = arr[:, 1]
+	Z_cord = arr[:, 2]
+	X_fft = np.abs(fft(X_cord))
+	Y_fft = np.abs(fft(Y_cord))
+	Z_fft = np.abs(fft(Z_cord))
+	fv = []
+	fv.append(np.mean(X_fft))
+	fv.append(np.mean(Y_fft))
+	fv.append(np.mean(Z_fft))
+	fv.append(np.max(X_fft))
+	fv.append(np.max(Y_fft))
+	
+	### alejandro
+	features = []
+	# Standard Deviation
+	features.append(np.std(arr, axis=0))
+	# Mean of absolute values
+	features.append(np.mean(np.abs(arr), axis=0))
+	# Max-Min difference
+	features.append(np.max(arr, axis=0) - np.min(arr, axis=0))
+	# Sum of absolute values
+	features.append(np.sum(np.abs(arr), axis=0))
+	# Sum of squares
+	features.append(np.sum(np.square(arr), axis=0))
+	features = np.concatenate(features)
+
+	return np.concatenate((fvec,fv,features))
 
 # This is the part that trains a classifier
 def train_ml_classifier(): 
