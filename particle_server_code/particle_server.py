@@ -4,6 +4,7 @@ import numpy as np
 import scipy as sp
 from sklearn.svm import SVC
 from scipy.fft import fft
+from sklearn.ensemble import RandomForestClassifier
 
 
 frame_rate = 50 # accelerometer sampling rate
@@ -61,7 +62,8 @@ def get_feature_conditional(peaks, prominences, mode):
         return np.average(np.diff(prominences[0]))
 
 def featurize(arr):
-    return arr.flatten()
+    fvec = np.std(arr,axis=0)
+    return fvec
 
 	### amy
 	# ax = median_filter(extract_ax(arr))
@@ -106,7 +108,7 @@ def featurize(arr):
 
 # This is the part that trains a classifier
 def train_ml_classifier(): 
-	clf_model = SVC(kernel='poly')
+	clf_model = RandomForestClassifier()
 	X = []
 	Y = []
 	for key in gesture_dict.keys():
@@ -139,7 +141,7 @@ def parse_data_stream(data_stream):
 				values.append(float(val))
 			except ValueError:
 				break
-		if (len(values) == 12):
+		if (len(values) == 21):
 			data_vals.append(values)
 	
 	data_vals = np.array(data_vals)
