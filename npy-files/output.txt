@@ -1,0 +1,105 @@
+Sensor_1:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		0.8703125072000003		4.970458762101761e-56
+	Shoulder press elbow flare		93.73046874400002		4.970458762101761e-56
+	Shoulder press not full extension		-105.3250000944		4.970458762101761e-56
+Sensor_2:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		160.9945313064		0.0
+	Shoulder press elbow flare		336.99218763360005		0.0
+	Shoulder press not full extension		625.9867190024		0.0
+Sensor_3:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		965.3796877552		7.690548518420813e-261
+	Shoulder press elbow flare		893.0554689832001		7.690548518420813e-261
+	Shoulder press not full extension		826.0179689936001		7.690548518420813e-261
+Sensor_4:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		569.185156376		8.704343057113724e-68
+	Shoulder press elbow flare		652.5171876264001		8.704343057113724e-68
+	Shoulder press not full extension		519.8718751256		8.704343057113724e-68
+Sensor_5:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-459.3136719184		1.3579598950333147e-113
+	Shoulder press elbow flare		-379.73828130320004		1.3579598950333147e-113
+	Shoulder press not full extension		-748.0742188744001		1.3579598950333147e-113
+Sensor_6:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		443.41992200160007		3.1573586604670806e-88
+	Shoulder press elbow flare		493.78554699680006		3.1573586604670806e-88
+	Shoulder press not full extension		393.2363282456		3.1573586604670806e-88
+Sensor_7:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		1.1106627144		0.12440036150095382
+	Shoulder press elbow flare		-3.5728732208		0.12440036150095382
+	Shoulder press not full extension		-0.40111754960000034		0.12440036150095382
+Sensor_8:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-0.6691053376		0.00012812741866134232
+	Shoulder press elbow flare		4.087083967999999		0.00012812741866134232
+	Shoulder press not full extension		-0.029117558400000142		0.00012812741866134232
+Sensor_9:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-2.4220519287999998		0.0436202935403649
+	Shoulder press elbow flare		2.4033465703999988		0.0436202935403649
+	Shoulder press not full extension		0.3056427504000002		0.0436202935403649
+Sensor_10:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-26.1568800808		1.0157053005057443e-212
+	Shoulder press elbow flare		-33.8198403528		1.0157053005057443e-212
+	Shoulder press not full extension		-29.568480192800006		1.0157053005057443e-212
+Sensor_11:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		18.1749600056		8.5117102680223e-160
+	Shoulder press elbow flare		23.499720040000003		8.5117102680223e-160
+	Shoulder press not full extension		3.2428799848		8.5117102680223e-160
+Sensor_12:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		6.840119995999999		8.77609330515575e-209
+	Shoulder press elbow flare		1.3162800000000001		8.77609330515575e-209
+	Shoulder press not full extension		9.30228		8.77609330515575e-209
+Sensor_13:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-378.040234408		1.2116386210139018e-27
+	Shoulder press elbow flare		-454.6250000472		1.2116386210139018e-27
+	Shoulder press not full extension		-580.1152345008		1.2116386210139018e-27
+Sensor_14:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		428.6558594912		0.0
+	Shoulder press elbow flare		422.86752942479995		0.0
+	Shoulder press not full extension		645.612890736		0.0
+Sensor_15:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		565.8886719872		2.0179823352377422e-105
+	Shoulder press elbow flare		595.4815919224		2.0179823352377422e-105
+	Shoulder press not full extension		436.56171887759996		2.0179823352377422e-105
+Sensor_16:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-1.2442808919999997		0.001673089424178133
+	Shoulder press elbow flare		-5.175841288800001		0.001673089424178133
+	Shoulder press not full extension		-0.6603847344		0.001673089424178133
+Sensor_17:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-3.2400183064000005		0.15850516957615382
+	Shoulder press elbow flare		3.2204885936		0.15850516957615382
+	Shoulder press not full extension		0.10947784639999991		0.15850516957615382
+Sensor_18:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		-1.0917923704000003		0.43689175764709853
+	Shoulder press elbow flare		-0.1680794288		0.43689175764709853
+	Shoulder press not full extension		-0.16285800800000005		0.43689175764709853
+Sensor_19:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		20.3261999344		5.79438134343916e-102
+	Shoulder press elbow flare		22.543679972		5.79438134343916e-102
+	Shoulder press not full extension		32.823239962399995		5.79438134343916e-102
+Sensor_20:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		3.3465600008000003		0.0
+	Shoulder press elbow flare		0.8432399968000002		0.0
+	Shoulder press not full extension		13.0982399896		0.0
+Sensor_21:
+	Gesture		Mean Value	ANOVA p-value
+	Shoulder press Good		23.8305600672		3.851749240489078e-70
+	Shoulder press elbow flare		26.6610000032		3.851749240489078e-70
+	Shoulder press not full extension		15.950760017599999		3.851749240489078e-70
