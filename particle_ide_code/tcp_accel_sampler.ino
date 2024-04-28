@@ -6,7 +6,7 @@
 #define AD0_VAL_2 1  
 
 TCPClient client; // TCP Client
-byte server[] = {172,26,23,208}; // TODO: Server IP, separated by commas instead of periods
+byte server[] = {172,26,84,172}; // TODO: Server IP, separated by commas instead of periods
 char buffer[256]; // rx buffer
 int framesToRead = 0; // samples remaining
 String msg = ""; // tx buffer
@@ -57,7 +57,6 @@ void restartSensors(){
   WIRE_PORT.begin();
   WIRE_PORT.setClock(400000);
 
-  myICM1.begin(WIRE_PORT, AD0_VAL_1);
   myICM2.begin(WIRE_PORT, AD0_VAL_2);
 
 
@@ -68,7 +67,6 @@ void restartSensors(){
 // }
 
 void loop() {
-  Serial.println(framesToRead); 
   if (framesToRead > 0) {
     digitalWrite(led, HIGH);
     if (myICM1.dataReady() && myICM2.dataReady() && accel.available()) {
@@ -91,9 +89,16 @@ void loop() {
             msg = "";
         }
     }
-    // else{
-    //     restartSensors();
-    // }
+    else if(myICM2.statusString() == "Data Underflow"){
+        Serial.println("Resetting");
+        restartSensors();
+        Serial.println("Done");
+    }else{
+        Serial.println(framesToRead);
+        Serial.println(myICM1.dataReady()); 
+        Serial.println(myICM2.statusString()); 
+        Serial.println(accel.available()); 
+    }
   }
   else if (client.status() && client.available()) // if available recv, recv next command.
   {
