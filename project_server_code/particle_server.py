@@ -157,7 +157,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 print ("Socket successfully created") 
 
 # TODO: update with your IP here
-s.bind(('172.26.69.107', port))
+s.bind(('172.26.23.208', port))
 print ("socket binded to %s" %(port))
 
 s.listen(5)      
