@@ -6,6 +6,7 @@ from sklearn.svm import SVC
 from scipy.fft import fft
 from sklearn.ensemble import RandomForestClassifier
 from threading import Thread
+import time
 
 frame_rate = 50 # accelerometer sampling rate
 duration_s = 2.5 # sample duration in seconds
@@ -208,7 +209,7 @@ def collectTests():
       curr_prediction = clf.predict([X_in])[0]
       sendPrediction(curr_prediction)
       prediction = prediction + "<br>" + curr_prediction # Collect prediction history
-      # print("yay")
+      time.sleep(1) # Sleep one second, to hopefully give particle some time to process prediction buffer (or else buffer will contain both prediction and `125`)
 
 # spawn thread to handle collecting data and predictions
 thread = None
