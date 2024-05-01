@@ -16,20 +16,14 @@
     ></script>
   </head>
   <body class="col-lg-6 offset-lg-3">
-    <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/apps/plugins/564149"></iframe>
+   <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2526614/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
     <form method="post" style="padding-top: 20%">
       <div class="row justify-content-center gap-3">
         <h1>A3: ML Gesture Recognition</h1>
         select posture to train:
-        <select name="posture" class="form-select">
-          <option selected value="Shoulder press Good">Shoulder press Good</option>
-          <option value="Shoulder press elbow flare">Shoulder press elbow flare</option>
-          <option value="Shoulder press not full extension">Shoulder press not full extension</option>
-        </select>
         <div class="row justify-content-center">
-          <input type="submit" name="submit" value="Train" /><br />
-          <input type="submit" name="submit" value="Test" /><br />
-          <input type="submit" name="submit" value="Reset" />
+          <input type="submit" name="submit" value="Start" /><br />
+          <input type="submit" name="submit" value="Stop" />
         </div>
       </div>
     </form>

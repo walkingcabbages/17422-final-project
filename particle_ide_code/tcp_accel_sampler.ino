@@ -6,7 +6,7 @@
 #define AD0_VAL_2 1  
 
 TCPClient client; // TCP Client
-byte server[] = {172,26,84,172}; // TODO: Server IP, separated by commas instead of periods
+byte server[] = {10,0,0,10}; // TODO: Server IP, separated by commas instead of periods
 char buffer[256]; // rx buffer
 int framesToRead = 0; // samples remaining
 String msg = ""; // tx buffer
@@ -61,10 +61,15 @@ void restartSensors(){
 
 
 }
-// void loop(){
-//     readAndPrintData();
-//     delay(300);
-// }
+
+void triggerFunction(String prediction) {
+    if (Particle.connected()) {
+        Particle.publish("push-notification", prediction);
+    }
+    else{
+        Serial.print("could not push");
+    }
+}
 
 void loop() {
   if (framesToRead > 0) {
@@ -106,10 +111,9 @@ void loop() {
     memset(buffer, 0, 256 * sizeof(char));
     int bytesRead = client.read((uint8_t *)buffer, 256);
     String buf = String(buffer);
-    // if (buf == "trigger_function") {
-    //   triggerFunction();
-    // }
-    // else {
+    if (buf.startsWith("trigger_function")) {
+      triggerFunction(buf.substring(16)); /* message format: "trigger_function <prediction>"*/
+    } else {
       framesToRead = buf.toInt();
       Serial.println("Measuring " + String(framesToRead) + " samples...");
       // 1
@@ -123,19 +127,10 @@ void loop() {
       delay(500);
       digitalWrite(led, LOW);
       delay(500);
-    //}
+    }
   } else { // if no available recv and no frames to read, inactive.
       digitalWrite(led, LOW);
   }
-}
-
-void triggerFunction() {
-    if (Particle.connected()) {
-        Particle.publish("push-notification", "it has activated");
-    }
-    else{
-        Serial.print("could not push");
-    }
 }
 
 
