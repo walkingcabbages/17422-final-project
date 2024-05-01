@@ -208,14 +208,18 @@ def collectTests():
       curr_prediction = clf.predict([X_in])[0]
       sendPrediction(curr_prediction)
       prediction = prediction + "<br>" + curr_prediction # Collect prediction history
-        
+      # print("yay")
+
+# spawn thread to handle collecting data and predictions
+thread = None
+   
 @app.route("/", methods = ['POST', 'GET'])
 def index():
-   global prediction, clf, gesture_dict, running
+   global prediction, clf, gesture_dict, running, thread
    gesture_dict = np.load("combined_gesture_dict.npy", allow_pickle=True).item()
    if clf is None: # If not trained, train a new model
       clf = train_ml_classifier()
-   
+         
    # check for post request
    if request.method == "POST":
       # print(request.form)
@@ -223,11 +227,15 @@ def index():
       if request.form["submit"] == "Start":
          prediction = "" # Reset prediction history
          running = True
-         thread = Thread(target=collectTests)
-         thread.start()
+         if not thread:
+            thread = Thread(target=collectTests)
+            thread.start()
       # if reset, delete gesture dict and reset classifier
       elif request.form["submit"] == "Stop":
          running = False
+         if thread:
+            thread.join()
+            thread = None
    
    # if prediction history present, update page
    if (prediction != ""): 
