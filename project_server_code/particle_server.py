@@ -6,7 +6,6 @@ from sklearn.svm import SVC
 from scipy.fft import fft
 from sklearn.ensemble import RandomForestClassifier
 from threading import Thread
-import time
 
 frame_rate = 50 # accelerometer sampling rate
 duration_s = 2.5 # sample duration in seconds
@@ -204,14 +203,11 @@ def sendPrediction(prediction):
 def collectTests():
    global running, prediction
    while running:
-      # t0 = time.time()
       stream = collectTest()
       X_in = featurize(parse_data_stream(stream)) # Featurization happens here
-      prediction = clf.predict([X_in])[0]
-      sendPrediction(prediction)
-      # t1 = time.time()
-      # time.sleep(max(0, 400-(t1-t0))) # alerts user to do exercise every 4 seconds
-      print("yay")
+      curr_prediction = clf.predict([X_in])[0]
+      sendPrediction(curr_prediction)
+      prediction = prediction + "<br>" + curr_prediction # Collect prediction history
         
 @app.route("/", methods = ['POST', 'GET'])
 def index():
@@ -225,6 +221,7 @@ def index():
       # print(request.form)
       # if beginning identifying data, receive new data stream and make inference
       if request.form["submit"] == "Start":
+         prediction = "" # Reset prediction history
          running = True
          thread = Thread(target=collectTests)
          thread.start()
@@ -232,7 +229,7 @@ def index():
       elif request.form["submit"] == "Stop":
          running = False
    
-   # if prediction present, update page
+   # if prediction history present, update page
    if (prediction != ""): 
       return render_template("index.html", pred=prediction)
    

@@ -15,22 +15,57 @@
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="col-lg-6 offset-lg-3">
-   <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2526614/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
-    <form method="post" style="padding-top: 20%">
-      <div class="row justify-content-center gap-3">
-        <h1>A3: ML Gesture Recognition</h1>
-        select posture to train:
+  <body class="container">
+    <div class="col justify-content-center align-content-center">
+      <!-- TODO: REPLACE ALL OF THESE IFRAMES WHICH ACTUALLY MEANINFUL GRAPHS/WEBHOOKS -->
+      <h1 class="">Exercise Form Corrector</h1>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <iframe
+              width="450"
+              height="260"
+              style="border: 1px solid #cccccc"
+              src="https://thingspeak.com/channels/2526614/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+            ></iframe>
+          </div>
+          <div class="col">
+            <iframe
+              width="450"
+              height="260"
+              style="border: 1px solid #cccccc"
+              src="https://thingspeak.com/channels/2526614/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+            ></iframe>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <iframe
+              width="450"
+              height="260"
+              style="border: 1px solid #cccccc"
+              src="https://thingspeak.com/channels/2526614/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+            ></iframe>
+          </div>
+          <div class="col">
+            <iframe
+              width="450"
+              height="260"
+              style="border: 1px solid #cccccc"
+              src="https://thingspeak.com/channels/2526614/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+      <form method="post" style="padding-top: 20">
         <div class="row justify-content-center">
           <input type="submit" name="submit" value="Start" /><br />
           <input type="submit" name="submit" value="Stop" />
         </div>
-      </div>
-    </form>
-    {% if trials %}
-    <div>Training Data: {{trials}}</div>
-    {% endif %} {% if pred %}
-    <h1>Prediction: {{pred}}</h1>
-    {% endif %}
+      </form>
+    </div>
+    {% if pred %}
+    <h1>Prediction History:</h1>
+    {% autoescape false %} {{pred}} {% endautoescape %} {% endif %}
   </body>
 </html>
