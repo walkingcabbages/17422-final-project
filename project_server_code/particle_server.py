@@ -64,49 +64,46 @@ def get_feature_conditional(peaks, prominences, mode):
         return np.average(np.diff(prominences[0]))
 
 def featurize(arr):
-    fvec = np.std(arr,axis=0)
-    return fvec
+   ## amy
+   ax = median_filter(extract_ax(arr))
+   ay = median_filter(extract_ay(arr))
+   (ax_peaks, ax_mins, ay_peaks, ay_mins) = get_extrema(ax, ay)
+   (ax_peak_prominence, ax_min_prominence, ay_peak_prominence, ay_min_prominence) = get_prominence(ax, ax_peaks, ax_mins, ay, ay_peaks, ay_mins)
+   fvec = []
+   fvec.append(ax_peaks[0].shape[0]) # number of ax peaks
+   fvec.append(ay_peaks[0].shape[0]) # number of ay peaks
+   fvec.append(get_feature_conditional(ax_peaks, ax_peak_prominence, 'AVG')) # average prominence of ax maxima
+   fvec.append(get_feature_conditional(ay_peaks, ay_peak_prominence, 'AVG')) # average prominence of ay maxima
+   
+   ### nandini
+   X_cord = arr[:, 0]
+   Y_cord = arr[:, 1]
+   Z_cord = arr[:, 2]
+   X_fft = np.abs(fft(X_cord))
+   Y_fft = np.abs(fft(Y_cord))
+   Z_fft = np.abs(fft(Z_cord))
+   fv = []
+   fv.append(np.mean(X_fft))
+   fv.append(np.mean(Y_fft))
+   fv.append(np.mean(Z_fft))
+   fv.append(np.max(X_fft))
+   fv.append(np.max(Y_fft))
+   
+   ### alejandro
+   features = []
+   # Standard Deviation
+   features.append(np.std(arr, axis=0))
+   # Mean of absolute values
+   features.append(np.mean(np.abs(arr), axis=0))
+   # Max-Min difference
+   features.append(np.max(arr, axis=0) - np.min(arr, axis=0))
+   # Sum of absolute values
+   features.append(np.sum(np.abs(arr), axis=0))
+   # Sum of squares
+   features.append(np.sum(np.square(arr), axis=0))
+   features = np.concatenate(features)
 
-	### amy
-	# ax = median_filter(extract_ax(arr))
-	# ay = median_filter(extract_ay(arr))
-	# (ax_peaks, ax_mins, ay_peaks, ay_mins) = get_extrema(ax, ay)
-	# (ax_peak_prominence, ax_min_prominence, ay_peak_prominence, ay_min_prominence) = get_prominence(ax, ax_peaks, ax_mins, ay, ay_peaks, ay_mins)
-	# fvec = []
-	# fvec.append(ax_peaks[0].shape[0]) # number of ax peaks
-	# fvec.append(ay_peaks[0].shape[0]) # number of ay peaks
-	# fvec.append(get_feature_conditional(ax_peaks, ax_peak_prominence, 'AVG')) # average prominence of ax maxima
-	# fvec.append(get_feature_conditional(ay_peaks, ay_peak_prominence, 'AVG')) # average prominence of ay maxima
-	
-	# ### nandini
-	# X_cord = arr[:, 0]
-	# Y_cord = arr[:, 1]
-	# Z_cord = arr[:, 2]
-	# X_fft = np.abs(fft(X_cord))
-	# Y_fft = np.abs(fft(Y_cord))
-	# Z_fft = np.abs(fft(Z_cord))
-	# fv = []
-	# fv.append(np.mean(X_fft))
-	# fv.append(np.mean(Y_fft))
-	# fv.append(np.mean(Z_fft))
-	# fv.append(np.max(X_fft))
-	# fv.append(np.max(Y_fft))
-	
-	# ### alejandro
-	# features = []
-	# # Standard Deviation
-	# features.append(np.std(arr, axis=0))
-	# # Mean of absolute values
-	# features.append(np.mean(np.abs(arr), axis=0))
-	# # Max-Min difference
-	# features.append(np.max(arr, axis=0) - np.min(arr, axis=0))
-	# # Sum of absolute values
-	# features.append(np.sum(np.abs(arr), axis=0))
-	# # Sum of squares
-	# features.append(np.sum(np.square(arr), axis=0))
-	# features = np.concatenate(features)
-
-	# return np.concatenate((fvec,fv,features))
+   return np.concatenate((fvec,fv,features))
 
 # This is the part that trains a classifier
 def train_ml_classifier(): 
@@ -159,7 +156,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 print ("Socket successfully created") 
 
 # TODO: update with your IP here
-s.bind(('10.0.0.10', port))
+s.bind(('172.26.84.172', port))
 print ("socket binded to %s" %(port))
 
 s.listen(5)      
@@ -202,41 +199,73 @@ def sendPrediction(prediction):
    
 # collect tests until stopped
 def collectTests():
-   global running, prediction
-   while running:
+   global running, prediction, currReps, thread
+   while running or currReps > 0:
       stream = collectTest()
       X_in = featurize(parse_data_stream(stream)) # Featurization happens here
+      print(len(parse_data_stream(stream)))
+      print(parse_data_stream(stream))
+      arr = parse_data_stream(stream)
       curr_prediction = clf.predict([X_in])[0]
+      sum = 0
+      z_avg = np.mean(arr[:, 14], axis=0) #Z acceleration for 3 IMUs
+      magX_avg = np.mean(arr[:, 18], axis=0) #magnetomer_x acceleration for 2 IMUs 6,18
+      cmd = str(z_avg) + " " + str(magX_avg)
+      cmd_b = bytearray()
+      cmd_b.extend(map(ord, cmd))
+      print ("Sending to plot")
+      newSocket.send(cmd_b)
+      # for i in range(0,125):
+      #    sum += arr[i][5]
+      # avg = sum/125 
+      #5th , 14th data
       sendPrediction(curr_prediction)
       prediction = prediction + "<br>" + curr_prediction # Collect prediction history
       time.sleep(1) # Sleep one second, to hopefully give particle some time to process prediction buffer (or else buffer will contain both prediction and `125`)
+      currReps -= 1
 
 # spawn thread to handle collecting data and predictions
 thread = None
    
 @app.route("/", methods = ['POST', 'GET'])
 def index():
-   global prediction, clf, gesture_dict, running, thread
+   global prediction, clf, gesture_dict, running, thread, currReps
+   currReps = 0
    gesture_dict = np.load("combined_gesture_dict.npy", allow_pickle=True).item()
    if clf is None: # If not trained, train a new model
       clf = train_ml_classifier()
          
    # check for post request
    if request.method == "POST":
-      # print(request.form)
+      print(request.form)
       # if beginning identifying data, receive new data stream and make inference
       if request.form["submit"] == "Start":
+         if(request.form["reps"] != currReps and request.form["reps"] != ''):
+            currReps = int(request.form["reps"])
+         print("Start")
          prediction = "" # Reset prediction history
-         running = True
+         if(currReps > 0 and currReps != ''):
+            running = False
+         else:
+            running = True
          if not thread:
             thread = Thread(target=collectTests)
             thread.start()
+            if(running == False and thread):
+               thread.join()
+               thread = None
       # if reset, delete gesture dict and reset classifier
       elif request.form["submit"] == "Stop":
          running = False
          if thread:
             thread.join()
             thread = None
+            # if reset, delete gesture dict and reset classifier
+      # elif request.form["reps"] != '':
+      #    print(request.form["reps"])
+      #    running = False
+      #    currReps = int(request.form["reps"])
+      #    print(currReps)
    
    # if prediction history present, update page
    if (prediction != ""): 

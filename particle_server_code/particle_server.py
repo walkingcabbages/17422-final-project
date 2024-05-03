@@ -157,7 +157,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 print ("Socket successfully created") 
 
 # TODO: update with your IP here
-s.bind(('172.26.23.208', port))
+s.bind(('172.26.84.172', port))
 print ("socket binded to %s" %(port))
 
 s.listen(5)      
@@ -193,7 +193,7 @@ def collectTest():
 @app.route("/", methods = ['POST', 'GET'])
 def index():
 	global prediction, clf, gesture_dict
-	# gesture_dict = np.load("gesture_dict.npy", allow_pickle=True).item()
+	gesture_dict = np.load("gesture_dict.npy", allow_pickle=True).item()
 
 	# check for post request
 	if request.method == "POST":
